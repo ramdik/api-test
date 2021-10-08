@@ -19,8 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/transaction', [TransactionController::class, 'index']);
+/* Route::get('/transaction', [TransactionController::class, 'index']);
 Route::get('/transaction/{id}', [TransactionController::class, 'show']);
 Route::post('/transaction', [TransactionController::class, 'store']);
 Route::put('/transaction/{id}', [TransactionController::class, 'update']);
-Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
+Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']); */
+
+// Route::resource for bundling all default method from laravel
+Route::resource('/transaction', TransactionController::class)->except(['create', 'edit']);
