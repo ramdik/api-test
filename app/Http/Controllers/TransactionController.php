@@ -46,35 +46,35 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         //adding rule with validator
-       $validator = Validator::make($request->all(), [
-           'title' => 'required',
-           'amount' => 'required|numeric',
-           'type' => 'required|in:expense,revenue'
-       ]);
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'amount' => 'required|numeric',
+            'type' => 'required|in:expense,revenue'
+        ]);
 
-       // if validator req fails return 422 & err msg
-       if ($validator->fails()) {
-           return response()->json(
-               $validator->errors(),
-               Response::HTTP_UNPROCESSABLE_ENTITY
-           );
-       }
+        // if validator req fails return 422 & err msg
+        if ($validator->fails()) {
+            return response()->json(
+                $validator->errors(),
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
+        }
 
-       // if validator true do this
-       try {
-           $transaction = Transaction::create($request->all());
-           $response = [
-               'message' => 'Transaction success created',
-               'success' => true,
-               'data' => $transaction
-           ];
+        // if validator true do this
+        try {
+            $transaction = Transaction::create($request->all());
+            $response = [
+                'message' => 'Transaction success created',
+                'success' => true,
+                'data' => $transaction
+            ];
 
-           return response()->json($response, Response::HTTP_CREATED);
-       } catch (QueryException $exept) {
-           return response()->json([
-               'message' => 'Transaction fail ' . $exept->errorInfo
-           ]);
-       }
+            return response()->json($response, Response::HTTP_CREATED);
+        } catch (QueryException $exept) {
+            return response()->json([
+                'message' => 'Transaction fail ' . $exept->errorInfo
+            ]);
+        }
     }
 
     /**
@@ -90,7 +90,7 @@ class TransactionController extends Controller
             'message' => 'Pencarian selesai',
             'success' => true,
             'data' => $transaction
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -117,34 +117,34 @@ class TransactionController extends Controller
 
         //adding rule with validator
         $validator = Validator::make($request->all(), [
-        'title' => 'required',
-        'amount' => 'required|numeric',
-        'type' => 'required|in:expense,revenue'
-    ]);
-
-    // if validator req fails return 422 & err msg
-    if ($validator->fails()) {
-        return response()->json(
-            $validator->errors(),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        );
-    }
-
-    // if validator true do this
-    try {
-        $transaction->update($request->all());
-        $response = [
-            'message' => 'Transaction success update',
-            'success' => true,
-            'data' => $transaction
-        ];
-
-        return response()->json($response, Response::HTTP_OK);
-    } catch (QueryException $exept) {
-        return response()->json([
-            'message' => 'Transaction fail ' . $exept->errorInfo
+            'title' => 'required',
+            'amount' => 'required|numeric',
+            'type' => 'required|in:expense,revenue'
         ]);
-    }
+
+        // if validator req fails return 422 & err msg
+        if ($validator->fails()) {
+            return response()->json(
+                $validator->errors(),
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
+        }
+
+        // if validator true do this
+        try {
+            $transaction->update($request->all());
+            $response = [
+                'message' => 'Transaction success update',
+                'success' => true,
+                'data' => $transaction
+            ];
+
+            return response()->json($response, Response::HTTP_OK);
+        } catch (QueryException $exept) {
+            return response()->json([
+                'message' => 'Transaction fail ' . $exept->errorInfo
+            ]);
+        }
     }
 
     /**
@@ -153,8 +153,22 @@ class TransactionController extends Controller
      * @param  \App\Models\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaction $transaction)
+    public function destroy($id)
     {
-        //
+        $transaction = Transaction::findOrFail($id);
+
+        // if validator true do this
+        try {
+            $transaction->delete();
+            $response = [
+                'message' => 'Transaction has been delete',
+            ];
+
+            return response()->json($response, Response::HTTP_OK);
+        } catch (QueryException $exept) {
+            return response()->json([
+                'message' => 'Transaction fail ' . $exept->errorInfo
+            ]);
+        }
     }
 }
