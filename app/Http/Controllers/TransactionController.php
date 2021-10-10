@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -17,9 +18,9 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transaction = Transaction::orderBy('time', 'DESC')->get();
+        $transaction = Transaction::orderBy('id', 'DESC')->get();
         $response = [
-            'message' => 'List transaction order by newer time',
+            'message' => 'List transaction order by newer id',
             'success' => true,
             'data' => $transaction
         ];
@@ -47,9 +48,9 @@ class TransactionController extends Controller
     {
         //adding rule with validator
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'amount' => 'required|numeric',
-            'type' => 'required|in:expense,revenue'
+            'title'     => 'required',
+            'amount'    => 'required|numeric',
+            'type'      => 'required|in:expense,revenue'
         ]);
 
         // if validator req fails return 422 & err msg

@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->string('title');
             $table->double('amount');
-            $table->timestamp('time')->default(now());
+            $table->timestamp('time')->useCurrent(); //waktu local sekarang
             $table->enum('type', ['expense', 'revenue']);
             $table->timestamps();
         });
